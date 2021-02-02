@@ -2,6 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Nav, Navbar, FormControl, Form, Button, NavDropdown } from 'react-bootstrap';
+import React, { useState } from 'react';
+
 
 
 const list = [
@@ -36,10 +38,49 @@ const newNumbers = numbers.map(function (number) {
 
 
 const App = () => {
+ 
+  const handleChange = event => {
+    console.log(event.target.value);
+  };
+
+  const stories = [
+    {
+      title: 'React',
+      url: 'https://reactjs.org/',
+      author: 'Jordan Walke',
+      num_comments: 3,
+      points: 4,
+      objectID: 1,
+    },
+    {
+      title: 'Redux',
+      url: 'https://redux.js.org/',
+      author: 'Dan Abramov, Andrew Clark',
+      num_comments: 2,
+      points: 5,
+      objectID: 1,
+    },
+  ];
+
+  const [searchTerm, setSearchTerm] = React.useState('');
+
+  const SearchChange = event => {
+    setSearchTerm(event.target.value);
+  };
+
+  const searchedStories = stories.filter(story => {
+    story.title.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
+  
+
+
 
   const title = 'React';
   let some_var = 414;
   console.log(some_var);
+  const [count, setCount] = useState(0);
+
   return (
     <Container>
 
@@ -67,7 +108,13 @@ const App = () => {
         </Navbar.Collapse>
       </Navbar>
 
-
+      <Row>
+        <Col>
+          <h1>
+            My Hacker stories
+          </h1>
+        </Col>
+      </Row>
       <Row>
         <Col>
           <h1>
@@ -75,39 +122,64 @@ const App = () => {
           </h1>
         </Col>
       </Row>
-      <Row>
-        <Col>
-          <label htmlFor="search">Search: </label>
-          <input id="search" type="text" />
-        </Col>
-      </Row>
 
-
+      <Search onSearch={handleChange} />
 
       <hr />
-     
-      <List />
 
-      <List />
-     
+      <List list={searchedStories} />
+
+      <br />
+
+      <p> You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+
 
     </Container>
 
   );
+};
+
+
+
+const Search = props => {
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const handleSearch = event => {
+    setSearchTerm(event.target.value);
+    props.onSearch(event);
   };
 
-const List = () => 
-   list.map(item => (
-    
-      <div key={item.objectID}>
-        <span>
-          <a href={item.url}>{item.title}</a>
-        </span>
-        <span>{item.author}</span>
-        <span>{item.num_comments}</span>
-        <span>{item.points}</span>
-      </div>
-    
+  return (
+    <Container>
+      <Row>
+        <Col>
+          <label htmlFor="search">Search:  </label>
+          <input id="search" type="text" onChange={props.onSearch} />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          Searching for <strong>{searchTerm}</strong>
+        </Col>
+      </Row>
+    </Container>
+  );
+};
+
+const List = props =>
+  props.list.map(item => (
+
+    <div key={item.objectID}>
+      <span>
+        <a href={item.url}>{item.title}</a>
+      </span>
+      <span>{item.author}</span>
+      <span>{item.num_comments}</span>
+      <span>{item.points}</span>
+    </div>
+
   ));
 
 

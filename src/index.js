@@ -42,7 +42,7 @@ async function main(){
 */
 
 ReactDOM.render(
-  <h1>Hello React World</h1>,
+
   <React.StrictMode>
     <App />
   </React.StrictMode>,
