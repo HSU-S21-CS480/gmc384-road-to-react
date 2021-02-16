@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 
 
 
-const list = [
+const list1 = [
   {
     title: 'React',
     url: 'https://reactjs.org/',
@@ -39,6 +39,8 @@ const newNumbers = numbers.map(function (number) {
 
 const App = () => {
  
+
+
   const handleChange = event => {
     console.log(event.target.value);
   };
@@ -62,7 +64,7 @@ const App = () => {
     },
   ];
 
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [searchTerm, setSearchTerm] = React.useState('React');
 
   const SearchChange = event => {
     setSearchTerm(event.target.value);
@@ -113,21 +115,17 @@ const App = () => {
           <h1>
             My Hacker stories
           </h1>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <h1>
-            {welcome.greeting}{welcome.title}
-          </h1>
-        </Col>
-      </Row>
 
-      <Search onSearch={handleChange} />
+          <Search search={searchTerm} onSearch={SearchChange} />
+        </Col>
+      </Row>
+      
+
+
 
       <hr />
-
-      <List list={searchedStories} />
+     
+      <List list={list1} />
 
       <br />
 
@@ -144,43 +142,50 @@ const App = () => {
 
 
 
-const Search = props => {
-  const [searchTerm, setSearchTerm] = React.useState('');
-  const handleSearch = event => {
-    setSearchTerm(event.target.value);
-    props.onSearch(event);
-  };
-
-  return (
+const Search = (props) => (
     <Container>
       <Row>
         <Col>
-          <label htmlFor="search">Search:  </label>
-          <input id="search" type="text" onChange={props.onSearch} />
+          <label htmlFor="search">Search:   </label><span> </span>
+          <input id="search" type="text" value={props.search} onChange={props.onSearch} />
         </Col>
       </Row>
       <Row>
         <Col>
-          Searching for <strong>{searchTerm}</strong>
+          Searching for <strong>{props.search}</strong>
         </Col>
       </Row>
     </Container>
-  );
-};
+);
 
-const List = props =>
-  props.list.map(item => (
 
-    <div key={item.objectID}>
-      <span>
-        <a href={item.url}>{item.title}</a>
-      </span>
-      <span>{item.author}</span>
-      <span>{item.num_comments}</span>
-      <span>{item.points}</span>
-    </div>
 
-  ));
+const List =({ list }) =>
+  list.map(({objectID, title, url, author, num_comments, points}) => <Item key= {objectID} title={title}
+    url={url}
+    author={author}
+    num_comments={num_comments}
+    points={points}/>
+);
+
+   
+const Item = ({ title, url, author, num_comments, points }) => (
+  <Container>
+    <Row>
+      <Col>
+        <span>
+          <a href = {url}>{title}</a>
+        </span>
+        <span>{author}</span>
+        <span>{num_comments}</span>
+        <span>{points}</span>
+
+      </Col>
+    </Row>
+  </Container>
+);
+
+
 
 
 
